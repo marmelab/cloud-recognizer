@@ -8,7 +8,8 @@ const { delay, download } = require('./utils');
 const getPage = async (type, page = 1, flickr) => new Promise((resolve, reject) =>
     flickr.photos.search({
         tags: type,
-        page: 1,
+        page,
+        limit: 5,
         order: 'date-posted-asc'
     }, (err, result) => {
         if (err) {
@@ -43,7 +44,7 @@ const downloadPage = async (type, page, flickr) => {
 
     for (const photo of photos) {
         const photoUrl = await getPhotoUrl(photo.id, flickr);
-        await delay(999); // rate limiting is 3600 requests per hour, so 1 per second. Let's move below the limit.
+        await delay(1001); // rate limiting is 3600 requests per hour, so 1 per second. Let's move below the limit.
         await download(photoUrl, type);
     }
 };
