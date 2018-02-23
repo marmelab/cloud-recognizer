@@ -1,0 +1,4 @@
+data/
+dataset/config.js
+images/**/*.jpg
+node_modules

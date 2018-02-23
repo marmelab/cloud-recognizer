@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "flickrapi": "0.6.0",
+    "uuid": "3.2.1"
+  },
+  "name": "cloud-recognizer",
+  "version": "1.0.0",
+  "description": "Cloud Recognizer Application",
+  "main": "index.js",
+  "author": "Jonathan Petitcolas <petitcolas.jonathan@gmail.com>",
+  "license": "MIT"
+}
