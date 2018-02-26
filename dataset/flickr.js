@@ -7,9 +7,9 @@ const { delay, download } = require('./utils');
 
 const getPage = async (type, page = 1, flickr) => new Promise((resolve, reject) =>
     flickr.photos.search({
-        tags: type,
+        tags: `cloud,${type}`,
+        tag_mode: 'all',
         page,
-        limit: 5,
         order: 'date-posted-asc'
     }, (err, result) => {
         if (err) {
@@ -43,9 +43,13 @@ const downloadPage = async (type, page, flickr) => {
     const { photos: { photo: photos } } = await getPage(type, page, flickr);
 
     for (const photo of photos) {
-        const photoUrl = await getPhotoUrl(photo.id, flickr);
-        await delay(1001); // rate limiting is 3600 requests per hour, so 1 per second. Let's move below the limit.
-        await download(photoUrl, type);
+        try {
+            const photoUrl = await getPhotoUrl(photo.id, flickr);
+            await delay(1100); // rate limiting is 3600 requests per hour, so 1 per second. Let's move below the limit.
+            await download(photoUrl, type);
+        } catch (err) {
+            console.error(err);
+        }
     }
 };
 
@@ -55,7 +59,7 @@ const downloadTypeFactory = flickr => async type => {
 
     const pages = [...Array(numberPages + 1).keys()].slice(1);
     for (const page of pages) {
-        console.log(`==> Downloading ${type} clouds (page ${page})`);
+        console.log(`==> Downloading ${type} clouds (page ${page}/${numberPages})`);
         await downloadPage(type, page, flickr);
     }
 };
